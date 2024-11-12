@@ -1,5 +1,5 @@
 [project]
-name = "template-circle-ci-task"
+name = "task-email-net-option-premium"
 version = "0.0.1"
 description = ""
 requires-python = ">=3.8,<4.0.0"

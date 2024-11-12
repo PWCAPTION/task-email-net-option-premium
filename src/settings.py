@@ -1,1 +1,1 @@
-TASK_NAME = "template-circle-ci-task"
+TASK_NAME = "task-email-net-option-premium"
