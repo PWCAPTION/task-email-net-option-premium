@@ -1,0 +1,67 @@
+version: 2.1
+orbs:
+  python: circleci/python@2.1.1
+
+jobs:
+  code-quality-check:
+    docker:
+      - image: cimg/python:3.12.4
+    steps:
+      - checkout
+      - run:
+          name: pip install black ruff mypy isort
+          command: |
+            pip install black ruff mypy isort
+      - run:
+          name: Running the cqc
+          command: |
+            black . --check --line-length 255
+            ruff check --line-length 255 .
+            mypy . --ignore-missing-imports
+            isort . --check --line-length 255
+  python-script:
+    docker:
+      - image: cimg/python:3.12.4
+    steps:
+      - checkout
+      - run:
+          name: pip3 install uv
+          command: |
+            pip3 install uv
+      - run:
+          name: uv run --no-dev src/main.py
+          command: |
+            uv run --no-dev src/main.py
+
+workflows:
+  run-python-script-not-main: 
+    jobs:
+      - code-quality-check:
+          filters:
+            branches:
+              ignore: main
+      - circleci-task-approval:
+          type: approval
+          filters:
+            branches:
+              ignore: main
+      - python-script:
+          requires: 
+            - circleci-task-approval
+            - code-quality-check
+          context:
+            - PackageAuthentication
+            - CaptionPartners
+  run-python-script-main:
+    jobs:
+      - code-quality-check:
+          filters:
+            branches:
+              only: main
+      - python-script:
+          requires:
+            - code-quality-check
+          context:
+            - PackageAuthentication
+            - CaptionPartners
+            
