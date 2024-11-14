@@ -26,7 +26,7 @@ def send_email(subject: str, body: str) -> None:
 
 
 def generate_email_subject() -> str:
-    return f"Net Option Premium: {datetime.today().strftime('%-m/%-d/%y')}"
+    return f"Option Premium Report: {datetime.today().strftime('%-m/%-d/%y')}"
 
 
 def generate_body_html(long_option_premium: int, short_option_premium: int, net_option_premium: int) -> str:
