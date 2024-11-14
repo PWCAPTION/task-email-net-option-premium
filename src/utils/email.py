@@ -1,32 +1,23 @@
 import os
 from datetime import datetime
 
-from caption_emailing import Emailer, caption_accounts
+from caption_emailing import Emailer
 from caption_emailing.caption_accounts import DEV
 
 
-def send_email(subject: str, body: str) -> None:
+def send_email(subject: str, body: str, email_recipients: list[str]) -> None:
     emailer = Emailer.with_creds(username=DEV, password=os.getenv("DEV_EMAIL_PASS"))
     emailer.add_subject_to_email(subject)
     email_body = body
     emailer.add_body_to_email(email_body, subtype="HTML")
     emailer.email_account.send_email(
-        email_recipients=[
-            # caption_accounts.TRADEOPS,
-            # caption_accounts.JEFFG,
-            # caption_accounts.BILLY,
-            caption_accounts.BRAYDEN,
-            # caption_accounts.DAN,
-            # caption_accounts.JASON,
-            # caption_accounts.JAZMIN,
-        ],
-        # email_recipients=[caption_accounts.BRAYDEN],
+        email_recipients=email_recipients,
         email_object=emailer.email_obj,
     )
 
 
 def generate_email_subject() -> str:
-    return f"Option Premium Report: {datetime.today().strftime('%-m/%-d/%y')}"
+    return f"OptionPremium Report: {datetime.today().strftime('%-m/%-d/%y')}"
 
 
 def generate_body_html(long_option_premium: int, short_option_premium: int, net_option_premium: int) -> str:
@@ -83,16 +74,16 @@ def generate_body_html(long_option_premium: int, short_option_premium: int, net_
     <body>
 
     <p>
-    <b>Long Option Premium: </b> {long_option_premium:,}
+    <b>Long OptionPremium: </b> {long_option_premium:,}
     </p>
     
 
     <p>
-    <b>Short Option Premium: </b> {short_option_premium:,}
+    <b>Short OptionPremium: </b> {short_option_premium:,}
     </p>
 
     <p>
-    <b>Net Option Premium: </b> {net_option_premium:,}
+    <b>Net OptionPremium: </b> {net_option_premium:,}
     </p>
 
     </body>

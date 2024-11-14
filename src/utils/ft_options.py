@@ -17,9 +17,10 @@ def get_ft_options_underliers(df_ft_options_api: pd.DataFrame) -> pd.Series:
     return df_ft_options_api["Underlyer"]
 
 
-def remove_equity_securities(df: pd.DataFrame, accounts: list) -> pd.DataFrame:
+def remove_all_equities_from_positions_df(df: pd.DataFrame) -> pd.DataFrame:
     """This function removes equity type securities so only options remain. You can specify which accounts"""
-    return df.loc[(df["Symbol"].str.len() > 10) & (df["Quantity"] != 0) & df["Account"].isin(accounts)]
+    df = df[df["Underlyer"] != "#0"]
+    return df.loc[(~df["Security"].str.contains("Equity")) & (df["Quantity"] != 0)]
 
 
 def combine_dfs(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
