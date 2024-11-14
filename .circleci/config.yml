@@ -21,7 +21,7 @@ jobs:
             isort . --check --line-length 255
   python-script:
     docker:
-      - image: cimg/python:3.12.4
+      - image: cimg/python:3.11.5
     steps:
       - checkout
       - run:
