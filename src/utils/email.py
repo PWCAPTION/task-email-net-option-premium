@@ -1,7 +1,6 @@
 import os
 from datetime import datetime
 
-import pandas as pd
 from caption_emailing import Emailer, caption_accounts
 from caption_emailing.caption_accounts import DEV
 
@@ -13,12 +12,12 @@ def send_email(subject: str, body: str) -> None:
     emailer.add_body_to_email(email_body, subtype="HTML")
     emailer.email_account.send_email(
         email_recipients=[
-            caption_accounts.TRADEOPS,
-            caption_accounts.JEFFG,
-            caption_accounts.BILLY,
+            # caption_accounts.TRADEOPS,
+            # caption_accounts.JEFFG,
+            # caption_accounts.BILLY,
             caption_accounts.BRAYDEN,
-            caption_accounts.DAN,
-            caption_accounts.JASON,
+            # caption_accounts.DAN,
+            # caption_accounts.JASON,
             # caption_accounts.JAZMIN,
         ],
         # email_recipients=[caption_accounts.BRAYDEN],
@@ -27,13 +26,10 @@ def send_email(subject: str, body: str) -> None:
 
 
 def generate_email_subject() -> str:
-    return f"Long Stock Hard To Borrow Results {datetime.today().strftime('%-m/%-d/%y')}"
+    return f"Net Option Premium: {datetime.today().strftime('%-m/%-d/%y')}"
 
 
-def generate_body_html(
-    tickers_long_stock: pd.DataFrame,
-    tickers_no_borrow_rate: pd.DataFrame,
-) -> str:
+def generate_body_html(long_option_premium: int, short_option_premium: int, net_option_premium: int) -> str:
     body_html = f"""
     <!DOCTYPE html>
     <html lang="en">
@@ -85,20 +81,20 @@ def generate_body_html(
     <title>Results</title>
     </head>
     <body>
-    <h1>Results:</h1>
 
     <p>
-    <b>P2 Tickers with long stock:</b>
-        <code>{tickers_long_stock.to_html(index=False, classes='table table-striped')}</code>
-        *Descending absolute value sort with negatives prioritized
+    <b>Long Option Premium: </b> {long_option_premium:,}
     </p>
     
 
     <p>
-    <b>P2 Tickers with long stock but WF gave no borrow rate:</b>
-        <code>{tickers_no_borrow_rate.to_html(index=False, classes='table table-striped')}</code>
-        *Probably due to these mostly being warrants
+    <b>Short Option Premium: </b> {short_option_premium:,}
     </p>
+
+    <p>
+    <b>Net Option Premium: </b> {net_option_premium:,}
+    </p>
+
     </body>
     </html>
     """

@@ -4,7 +4,10 @@ version = "0.0.1"
 description = ""
 requires-python = ">=3.8,<4.0.0"
 dependencies = [
+    "boto3>=1.35.60",
     "caption-emailing>=0.0.8",
+    "caption-ft-options-api>=0.0.5",
+    "caption-logger>=0.0.4",
 ]
 
 [tool.uv]

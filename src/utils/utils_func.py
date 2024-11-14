@@ -10,30 +10,26 @@ def get_date(days: int) -> str:
     return yesterday.strftime("%Y%m%d")
 
 
-def get_wf_lending_rate_final(wf_lending_rate: pd.DataFrame, gc: float) -> pd.DataFrame:
-    df = wf_lending_rate.copy()
-    df.loc[df["Rate"] == "GC", "Rate"] = gc
-    # df['Altered Rate'] = df['Rate'] * gc
-    return df
+def clean_mark_column(df: pd.DataFrame) -> pd.DataFrame:
+    """this function will remove rows if the mark column is not a number"""
+    return df[pd.to_numeric(df["Mark"], errors="coerce").notna()]
 
 
-def calculate_borrow_rate(df1: pd.DataFrame, df2: pd.DataFrame) -> pd.DataFrame:
-    df_merged = pd.merge(df1, df2, left_on="Symbol", right_on="Ticker")
-    df_merged["Rate"] = pd.to_numeric(df_merged["Rate"], errors="coerce")
-    df_merged["Borrow Cost"] = df_merged["Quantity"] * df_merged["Rate"] / 100
-    df_merged["Borrow Cost"] = df_merged["Borrow Cost"].round().astype(int)
-    df_sorted = df_merged.sort_values(by="Borrow Cost", ascending=True, na_position="last")
-    df_sorted = df_sorted.drop(columns=["Ticker", "AvailableQty", "Sedol", "Cusip", "ISIN"])
-    return df_sorted
+def calc_option_premium(df: pd.DataFrame) -> pd.DataFrame:
+
+    df["Option Premium"] = df["Quantity"] * df["Mark"] * 100
+    df["Option Premium"] = df["Option Premium"].round().astype(int)
+    df_calc = df
+    return df_calc
 
 
-def filter_df_for_negative_borrow_rate(df: pd.DataFrame) -> pd.DataFrame:
-    return df[df["Borrow Cost"] <= 0]
+def sum_option_premium(df: pd.DataFrame) -> pd.DataFrame:
+    return int(df["Option Premium"].apply(lambda x: x if isinstance(x, int) else 0).sum())
 
 
-def get_tickers_with_long_stock_but_no_rate_found(df_wf_summed, df_wf_final) -> pd.DataFrame:
-    # gets the rows in df1 that are not in df2
-    diff_df = df_wf_summed.merge(df_wf_final, how="left", indicator=True)
+def sum_short_option_premium(df: pd.DataFrame) -> pd.DataFrame:
+    return int(df["Option Premium"].apply(lambda x: x if isinstance(x, int) and x < 0 else 0).sum())
 
-    # filter for rows that are only in df1
-    return diff_df[diff_df["_merge"] == "left_only"].drop(columns="_merge")
+
+def sum_long_option_premium(df: pd.DataFrame) -> pd.DataFrame:
+    return int(df["Option Premium"].apply(lambda x: x if isinstance(x, int) and x > 0 else 0).sum())
