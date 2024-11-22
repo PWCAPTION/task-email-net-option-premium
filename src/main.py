@@ -7,6 +7,12 @@ from utils.email import generate_body_html, generate_email_subject, send_email
 from utils.ft_options import get_security_df_from_ft_options_api, remove_all_equities_from_positions_df
 from utils.utils_func import calc_option_premium
 
+"""
+simplify names to df
+pull filtering out of functions
+use aws utils for pulling files
+"""
+
 
 @email_on_failure(TASK_NAME)
 def main():
@@ -14,19 +20,24 @@ def main():
     df = remove_all_equities_from_positions_df(df)
     df["Mark"] = df["Mark"].fillna(value=0)
     df = calc_option_premium(df)
-    short_df = df[df["Quantity"] < 0]
-    short_option_premium = short_df["OptionPremium"].sum()
 
-    long_df = df[df["Quantity"] > 0]
-    long_option_premium = long_df["OptionPremium"].sum()
+    # short_df = df[df["Quantity"] < 0]
+    short_df = df[df["OptionPremium"] < 0]
+    short_option_premium = short_df["OptionPremium"].sum().round().astype(int)
+    short_option_premium = "{:,}".format(short_option_premium)
 
-    net_option_premium = df["OptionPremium"].sum()
+    # long_df = df[df["Quantity"] > 0]
+    long_df = df[df["OptionPremium"] > 0]
+    long_option_premium = long_df["OptionPremium"].sum().round().astype(int)
+    long_option_premium = "{:,}".format(long_option_premium)
+
+    net_option_premium = df["OptionPremium"].sum().round().astype(int)
+    net_option_premium = "{:,}".format(net_option_premium)
 
     print(long_option_premium)
     print(short_option_premium)
     print(net_option_premium)
 
-    # Send email with the above results to Trade Ops email plus Jeff G and Billy R
     subject = generate_email_subject()
     body_html = generate_body_html(long_option_premium, short_option_premium, net_option_premium)
 

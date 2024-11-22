@@ -17,7 +17,7 @@ def send_email(subject: str, body: str, email_recipients: list[str]) -> None:
 
 
 def generate_email_subject() -> str:
-    return f"OptionPremium Report: {datetime.today().strftime('%-m/%-d/%y')}"
+    return f"Option Premium Report: {datetime.today().strftime('%-m/%-d/%y')}"
 
 
 def generate_body_html(long_option_premium: int, short_option_premium: int, net_option_premium: int) -> str:
@@ -74,16 +74,16 @@ def generate_body_html(long_option_premium: int, short_option_premium: int, net_
     <body>
 
     <p>
-    <b>Long OptionPremium: </b> {long_option_premium:,}
+    <b>Long OptionPremium: </b> {long_option_premium}
     </p>
     
 
     <p>
-    <b>Short OptionPremium: </b> {short_option_premium:,}
+    <b>Short OptionPremium: </b> {short_option_premium}
     </p>
 
     <p>
-    <b>Net OptionPremium: </b> {net_option_premium:,}
+    <b>Net OptionPremium: </b> {net_option_premium}
     </p>
 
     </body>
