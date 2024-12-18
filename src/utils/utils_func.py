@@ -17,8 +17,13 @@ def get_date(days: int) -> str:
 
 
 def calc_option_premium(df: pd.DataFrame) -> pd.DataFrame:
-    df["OptionPremium"] = df["Quantity"] * df["Mark"] * 100
-    df["OptionPremium"] = df["OptionPremium"]
+    # Create a boolean mask for rows where "Security" contains "(Warr)"
+    is_warrant = df["Security"].str.contains(r"\(Warr\)", regex=True)
+    
+    # Apply calculations based on the mask
+    df["OptionPremium"] = df["Quantity"] * df["Mark"] * 1  # Default multiplier for warrants is 1
+    df.loc[~is_warrant, "OptionPremium"] *= 100 # Non-warrants
+    
     return df
 
 

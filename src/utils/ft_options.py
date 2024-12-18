@@ -7,7 +7,7 @@ from settings import RETURN_FIELDS
 def get_security_df_from_ft_options_api(api: FTOptionsAPI) -> pd.DataFrame:
     df = api.get_position_risk_by_security(
         # account=Accounts.P2,
-        return_fields=RETURN_FIELDS,
+        # return_fields=RETURN_FIELDS,
         dataframe=True,
     )
     return df

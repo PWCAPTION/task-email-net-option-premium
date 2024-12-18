@@ -17,6 +17,7 @@ use aws utils for pulling files
 @email_on_failure(TASK_NAME)
 def main():
     df = get_security_df_from_ft_options_api(api=FTOptionsAPI.from_env())
+    df2 = df.loc[(df["Symbol"].str.len() > 10) & (df["Quantity"] != 0) & df["Account"].isin(["P1","P2","CHEF","PH","NHC","NHC2"])]
     df = remove_all_equities_from_positions_df(df)
     df["Mark"] = df["Mark"].fillna(value=0)
     df = calc_option_premium(df)
