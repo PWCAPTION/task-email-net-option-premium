@@ -1,7 +1,7 @@
 import pandas as pd
 from caption_ft_options_api.api_wrapper import FTOptionsAPI
 
-from settings import RETURN_FIELDS
+# from settings import RETURN_FIELDS
 
 
 def get_security_df_from_ft_options_api(api: FTOptionsAPI) -> pd.DataFrame:
