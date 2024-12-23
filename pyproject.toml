@@ -2,12 +2,11 @@
 name = "task-email-net-option-premium"
 version = "0.0.1"
 description = ""
-requires-python = ">=3.8,<4.0.0"
+requires-python = ">=3.9,<4.0.0"
 dependencies = [
     "boto3>=1.35.60",
     "caption-emailing>=0.0.8",
     "caption-ft-options-api>=0.0.5",
-    "caption-logger>=0.0.4",
 ]
 
 [tool.uv]
@@ -18,7 +17,8 @@ dev-dependencies = [
     "isort>=5.13.2",
     "pytest>=8.3.2",
     "caption-ease-of-use-scripts>=0.0.7",
-    "devtools>=0.12.2",
+    "devtools>=0.12.2"
+    
 ]
 
 [build-system]
