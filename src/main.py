@@ -46,13 +46,14 @@ def main():
         subject,
         body_html,
         [
-            # caption_accounts.TRADEOPS,
-            # caption_accounts.JEFFG,
-            # caption_accounts.BILLY,
+            caption_accounts.TRADEOPS,
+            caption_accounts.JEFFG,
+            caption_accounts.BILLY,
             caption_accounts.BRAYDEN,
-            # caption_accounts.DAN,
-            # caption_accounts.JASON,
-            # caption_accounts.JAZMIN,
+            caption_accounts.DAN,
+            caption_accounts.JASON,
+            "jramirez@captionpartners.com",
+            "jknapp@captionpartners.com"
         ],
     )
     print("Net OptionPremium email sent")
